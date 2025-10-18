@@ -1,0 +1,63 @@
+Azure Data Factory Pipeline Description
+Pipeline Name: PL_END_TO_END
+
+This Azure Data Factory (ADF) pipeline automates the end-to-end data processing workflow — from detecting new files in Azure Data Lake Storage (ADLS) to transforming data in Azure Databricks and preparing it for reporting in Power BI.
+
+Pipeline Activities:
+
+Get Metadata (get_file_name)
+
+Purpose: Checks Azure Data Lake Storage (ADLS) for the presence of new or updated source files.
+
+Functionality: Retrieves metadata such as file name, size, and last modified date to ensure the latest data is processed.
+
+Outcome: Passes the file information dynamically to the next activity for processing.
+
+Notebook Activity (exec_ntbk)
+
+Purpose: Executes an Azure Databricks notebook that performs data extraction, transformation, and loading (ETL).
+
+Functionality:
+
+Reads raw data from ADLS (e.g., sales data in CSV format).
+
+Cleans, filters, and aggregates the data using PySpark.
+
+Writes the transformed (curated) dataset to the Azure SQL Database.
+
+Outcome: Ensures that data in the SQL database is clean, structured, and analytics-ready.
+
+Web Activity (refresh_powerbi_report)
+
+Purpose: (Optional) Triggers a Power BI dataset refresh through the Power BI REST API.
+
+Functionality: Sends a POST request to refresh a published dataset in Power BI Service.
+(In your setup, this activity remains inactive since Power BI Desktop is used locally.)
+
+Outcome: Automates dashboard updates for near real-time reporting.
+
+Pipeline Run Summary:
+
+Pipeline Status: ✅ Succeeded
+
+Activities Executed: 3
+
+get_file_name → Succeeded (6s)
+
+exec_ntbk → Succeeded (9m 35s)
+
+refresh_powerbi_report → Inactive
+
+Integration Runtime: AutoResolveIntegrationRuntime (East US)
+
+Orchestration Time: ~10 minutes total
+
+End-to-End Flow Summary
+
+Detects a new sales file in ADLS.
+
+Launches Databricks to perform ETL operations.
+
+Loads cleaned data into Azure SQL Database.
+
+(Optionally) Triggers Power BI dataset refresh.
